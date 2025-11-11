@@ -59,7 +59,7 @@ plt.axhline(y=0, color='r', linestyle='--')
 
 # ln(y) = alpha + betaxi + epsiloni
 
-"""#### Não podemos comaprar esse R² (0.936) com o primeiro (0.913). ?????"""
+"""#### Não podemos comparar esse R² (0.936) com o primeiro (0.913)."""
 
 sns.regplot(x='x', y='y', data=df)
 plt.plot(df['x'], reg.fittedvalues, 'r,--')
