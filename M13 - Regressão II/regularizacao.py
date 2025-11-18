@@ -19,7 +19,7 @@ import patsy
 
 # %matplotlib inline
 
-# # Tive que criar a base de dados do 0, por conta de algum problema que interno
+# # Tive que criar a base de dados do 0, por conta de algum problema interno
 # # que está impedindo o seaborn de importá-la
 
 # tips_csv = """
