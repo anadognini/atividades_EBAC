@@ -38,7 +38,7 @@ def analise_sinasc_janeiro_2019(df, value, index, aggfunc, ylabel, xlabel, opcao
 
 df_fevereiro = pd.read_csv('SINASC_RO_2019_FEVEREIRO.csv')
 
-# Criando um diretório apenas para o mês de janeiro
+# Criando um diretório apenas para o mês de fevereiro
 
 max_data = str(df_fevereiro.DTNASC.max())[:7]
 max_data
