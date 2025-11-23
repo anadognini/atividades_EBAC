@@ -40,7 +40,7 @@ df_fevereiro = pd.read_csv('SINASC_RO_2019_FEVEREIRO.csv')
 
 # Criando um diretório apenas para o mês de fevereiro
 
-max_data = str(df_fevereiro.DTNASC.max())[:7]
+max_data = df_fevereiro.DTNASC.max()[:7]
 max_data
 os.makedirs('/content/output/figs/' + max_data, exist_ok=True)
 
@@ -48,28 +48,28 @@ os.makedirs('/content/output/figs/' + max_data, exist_ok=True)
 
 analise_sinasc_fevereiro_2019(df_fevereiro, 'IDADEMAE', 'DTNASC', 'mean',
                             'Média de Idade da Mãe', 'Data')
-plt.savefig('/content/output/figs/2019-01/' + 'media_idade_mae.png')
+plt.savefig('/content/output/figs/2019-02/' + 'media_idade_mae.png')
 
 analise_sinasc_fevereiro_2019(df_fevereiro, 'IDADEMAE', 'DTNASC', 'count',
                             'Quantidade de Nascimentos', 'Data')
-plt.savefig('/content/output/figs/2019-01/' + 'qtd_nascimentos.png')
+plt.savefig('/content/output/figs/2019-02/' + 'qtd_nascimentos.png')
 
 analise_sinasc_fevereiro_2019(df_fevereiro, 'PESO', 'ESCMAE', 'median',
                             'Peso Mediano', 'Escolaridade da Mãe')
-plt.savefig('/content/output/figs/2019-01/' + 'peso_escolaridade_mae.png')
+plt.savefig('/content/output/figs/2019-02/' + 'peso_escolaridade_mae.png')
 
 analise_sinasc_fevereiro_2019(df_fevereiro, 'APGAR1', 'GESTACAO', 'mean',
                             'APGAR1', 'Tempo de Gestação', 'sort')
-plt.savefig('/content/output/figs/2019-01/' + 'apgar1_tempo_gestacao.png')
+plt.savefig('/content/output/figs/2019-02/' + 'apgar1_tempo_gestacao.png')
 
 analise_sinasc_fevereiro_2019(df_fevereiro, 'APGAR5', 'GESTACAO', 'mean',
                             'APGAR5', 'Tempo de Gestação', 'sort')
-plt.savefig('/content/output/figs/2019-01/' + 'apgar5_tempo_gestacao.png')
+plt.savefig('/content/output/figs/2019-02/' + 'apgar5_tempo_gestacao.png')
 
 analise_sinasc_fevereiro_2019(df_fevereiro, 'IDADEMAE', ['DTNASC', 'SEXO'], 'mean',
                             'Média Idade Mãe', 'Data', 'unstack')
-plt.savefig('/content/output/figs/2019-01/' + 'qtd_nascimentos_sexo.png')
+plt.savefig('/content/output/figs/2019-02/' + 'qtd_nascimentos_sexo.png')
 
 analise_sinasc_fevereiro_2019(df_fevereiro, 'PESO', ['DTNASC', 'SEXO'], 'count',
                             'Média Idade Mãe', 'Data', 'unstack')
-plt.savefig('/content/output/figs/2019-01/' + 'peso_sexo.png')
+plt.savefig('/content/output/figs/2019-02/' + 'peso_sexo.png')
