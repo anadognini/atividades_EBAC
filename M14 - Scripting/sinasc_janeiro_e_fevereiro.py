@@ -21,7 +21,7 @@ import os
 
 # Função para criar os gráficos
 
-def analise_sinasc_janeiro_2019(df, value, index, aggfunc, ylabel, xlabel, opcao='nada'):
+def analise_sinasc_fevereiro_2019(df, value, index, aggfunc, ylabel, xlabel, opcao='nada'):
    if opcao == 'nada':
         pd.pivot_table(df, values=value, index=index, aggfunc=aggfunc).plot(figsize=[15, 5])
    elif opcao == 'sort':
