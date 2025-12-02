@@ -33,7 +33,7 @@ colunas = {
 results_renomeado = results.rename(columns=colunas)
 results_renomeado.head()
 
-# Criando um noov dataframe chamado result_renomeado com as colunas renomeadas.
+# Criando um novo dataframe chamado result_renomeado com as colunas renomeadas.
 # Pra cada coluna, fizemos um dicionário
 
 # Mudando o formato da coluna "Data" para Datetime
