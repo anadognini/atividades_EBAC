@@ -57,6 +57,6 @@ print('Variáveis: ', cols)
     'Variável': cols,
     'Feature importances': rf.feature_importances_
 })
-    .round(2)
     .sort_values('Feature importances', ascending=False)
-    .style.bar(color=['grey', 'lightblue'], align='zero'))
+    .style.bar(color=['grey', 'lightblue'], align='zero')
+    .format(precision=2))
