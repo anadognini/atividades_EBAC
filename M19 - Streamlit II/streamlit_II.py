@@ -17,22 +17,39 @@ def main():
     st.write('## Dataset Bruto')
     st.write(bank_raw.head())
 
+    ################# Filtro de Idade
+
     max_age = int(bank.age.max())
     min_age = int(bank.age.min())
 
-    idades = st.sidebar.slider('Selecione a faixa etária:', 
+    idades = st.sidebar.slider(label='Selecione a faixa etária',
                                min_value=min_age, 
                                max_value=max_age, 
                                value=(min_age, max_age),
                                step=1)
     
     st.sidebar.write('Idades selecionadas:', idades)
-    st.sidebar.write('Idade min:', idades[0])
-    st.sidebar.write('Idade max:', idades[1])
+    st.sidebar.write('Idade min:', idades[0],' | Idade max:', idades[1])
 
     bank = bank[(bank['age'] >= idades[0]) & (bank['age'] <= idades[1])]
 
-    st.write('## Dataset Filtrado por Idade')
+    st.sidebar.write('---')
+
+    ################ Filtro de profissão
+
+    jobs_list = bank.job.unique().tolist()
+    
+    jobs_selected = st.sidebar.multiselect(label='Selecione as profissões',
+                                  options=jobs_list,
+                                  default=jobs_list)
+    
+    st.sidebar.write('Profissões selecionadas:', jobs_selected)
+    
+    bank = bank[bank['job'].isin(jobs_selected)].reset_index(drop=True)
+
+    ################ Dataset após filtros
+
+    st.write('## Dataset Após Filtros')
     st.write(bank.head())
 
     bank_raw_target_perc = bank_raw.y.value_counts(normalize=True).to_frame() * 100
@@ -57,5 +74,5 @@ def main():
 
     plt.tight_layout()
     st.pyplot(fig)
-
+    
 main()
