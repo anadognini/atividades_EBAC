@@ -155,4 +155,6 @@ def main():
     plt.tight_layout()
     st.pyplot(fig)
     
-main()
+if __name__ == '__main__':
+    main()
+
