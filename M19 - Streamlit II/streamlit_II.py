@@ -21,10 +21,10 @@ def main():
     bank_raw = pd.read_csv("C:/Users/anado/OneDrive/Documentos/EBAC/M19 - Streamlit II/input/bank-additional-full.csv", sep=';')
     bank = bank_raw.copy()
 
-    st.sidebar.header('Filtros')
-
     st.write('## Dataset Bruto')
     st.write(bank_raw.head())
+
+    st.sidebar.header('Filtros')
 
     with st.sidebar.form(key='my_form'):
 
@@ -38,31 +38,94 @@ def main():
                                 max_value=max_age, 
                                 value=(min_age, max_age),
                                 step=1)
-        
-        st.write('Idades selecionadas:', idades)
-        st.write('Idade min:', idades[0],' | Idade max:', idades[1])
-
         st.write('---')
 
         ################ Filtro de profissão
 
         jobs_list = bank.job.unique().tolist()
         jobs_list.append('all')
-        
         jobs_selected = st.multiselect(label='Selecione as profissões',
                                     options=jobs_list,
                                     default=['all'])
-        
-        st.write('Profissões selecionadas:', jobs_selected)
+        st.write('---')
+
+        ################# Estado Civil
+
+        marital_list = bank.marital.unique().tolist()
+        marital_list.append('all')
+        marital_selected = st.multiselect(label='Selecione o estado civil', 
+                                          options=marital_list, 
+                                          default=['all'])
+        st.write('---')
+
+        ################# Default
+
+        default_list = bank.default.unique().tolist()
+        default_list.append('all')
+        default_selected = st.multiselect(label='Selecione o default', 
+                                          options=default_list, 
+                                          default=['all'])
+        st.write('---')
+
+        ################# Housing
+
+        housing_list = bank.housing.unique().tolist()
+        housing_list.append('all')
+        housing_selected = st.multiselect(label='Selecione o housing', 
+                                          options=housing_list, 
+                                          default=['all'])
+        st.write('---')
+
+        ################# Loan
+
+        loan_list = bank.loan.unique().tolist()
+        loan_list.append('all')
+        loan_selected = st.multiselect(label='Selecione o loan', 
+                                          options=loan_list, 
+                                          default=['all'])
+
+        st.write('---')
+
+        ################# Contact Type
+
+        contact_list = bank.contact.unique().tolist()
+        contact_list.append('all')
+        contact_selected = st.multiselect(label='Selecione o contato', 
+                                          options=contact_list, 
+                                          default=['all'])
+        st.write('---')
+
+        ################# Month
+
+        month_list = bank.month.unique().tolist()
+        month_list.append('all')
+        month_selected = st.multiselect(label='Selecione o mês', 
+                                          options=month_list, 
+                                          default=['all'])
+        st.write('---')
+
+        ################# Day of week
+
+        day_list = bank.day_of_week.unique().tolist()
+        day_list.append('all')
+        day_selected = st.multiselect(label='Selecione o dia da semana', 
+                                          options=day_list, 
+                                          default=['all'])
+        st.write('---')
 
         ################# Botão de Aplicar Filtros
 
-        submit_button = st.form_submit_button(label='Aplicar Filtros')
+        bank = (bank.query("age >= @idades[0] & age <= @idades[1]").
+                pipe(multiselect_filter, 'job', jobs_selected).
+                pipe(multiselect_filter, 'marital', marital_selected).
+                pipe(multiselect_filter, 'default', default_selected).
+                pipe(multiselect_filter, 'housing', housing_selected).
+                pipe(multiselect_filter, 'loan', loan_selected).
+                pipe(multiselect_filter, 'contact', contact_selected).
+                pipe(multiselect_filter, 'month', month_selected).
+                pipe(multiselect_filter, 'day_of_week', day_selected))
 
-        if submit_button:
-            bank = bank[(bank['age'] >= idades[0]) & (bank['age'] <= idades[1])]
-            bank = multiselect_filter(bank, 'job', jobs_selected)
-            st.success('Filtros aplicados!')
+        submit_button = st.form_submit_button(label='Aplicar Filtros')
 
     ################ Dataset após filtros
 
