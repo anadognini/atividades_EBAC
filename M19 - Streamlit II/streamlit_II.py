@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit as st
 import seaborn as sns
 import matplotlib.pyplot as plt
+from io import BytesIO
 
 custom_params = {"axes.spines.right": False, "axes.spines.top": False}
 sns.set_theme(style="whitegrid", rc=custom_params)
@@ -19,6 +20,20 @@ def multiselect_filter(relatorio, col, selecionados):
         return relatorio
     else:
         return relatorio[relatorio[col].isin(selecionados)].reset_index(drop=True)
+
+@st.cache()
+def df_to_string(df):
+    return df.to_csv(index=False)
+
+@st.cache_data
+def to_excel(df):
+    output = BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    df.to_excel(writer, index=False, sheet_name='Sheet1')
+    writer.close()
+    processed_data = output.getvalue()
+
+    return processed_data
 
 def main():
     st.set_page_config(page_title="Telemarketing Analysis", 
@@ -38,6 +53,27 @@ def main():
 
         st.write('## Dataset Bruto')
         st.write(bank_raw.head())
+
+        #### Transformando o dataset bruto em csv e fazendo download
+
+        csv = df_to_string(bank_raw)
+
+        st.write('### Download do dataset bruto em CSV')
+
+        st.download_button(label='Download CSV',
+                           data=csv,
+                           file_name='bank_marketing_data.csv',
+                           mime='text/csv')
+        
+        #### Transformando o dataset bruto em Excel e fazendo download
+        
+        df_xlsx = to_excel(bank_raw)
+
+        st.write('### Download do dataset bruto em Excel')
+        st.download_button(label='Download Excel',
+                           data=df_xlsx,
+                           file_name='bank_marketing_data.xlsx',
+                           mime='application/vnd.ms-excel')
 
         st.sidebar.header('Filtros')
 
