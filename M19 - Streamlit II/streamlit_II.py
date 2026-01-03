@@ -26,7 +26,7 @@ def df_to_string(df):
     return df.to_csv(index=False)
 
 @st.cache_data
-def to_excel(df):
+def df_to_excel(df):
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
     df.to_excel(writer, index=False, sheet_name='Sheet1')
@@ -54,26 +54,7 @@ def main():
         st.write('## Dataset Bruto')
         st.write(bank_raw.head())
 
-        #### Transformando o dataset bruto em csv e fazendo download
-
-        csv = df_to_string(bank_raw)
-
-        st.write('### Download do dataset bruto em CSV')
-
-        st.download_button(label='Download CSV',
-                           data=csv,
-                           file_name='bank_marketing_data.csv',
-                           mime='text/csv')
-        
-        #### Transformando o dataset bruto em Excel e fazendo download
-        
-        df_xlsx = to_excel(bank_raw)
-
-        st.write('### Download do dataset bruto em Excel')
-        st.download_button(label='Download Excel',
-                           data=df_xlsx,
-                           file_name='bank_marketing_data.xlsx',
-                           mime='application/vnd.ms-excel')
+        st.write('---')
 
         st.sidebar.header('Filtros')
 
@@ -163,6 +144,10 @@ def main():
                                             default=['all'])
             st.write('---')
 
+            ################# Tipo de gráfico
+
+            graph_type = st.radio('Selecione o tipo de gráfico', ('Barras', 'Pizza'))
+
             ################# Botão de Aplicar Filtros
 
             bank = (bank.query("age >= @idades[0] & age <= @idades[1]").
@@ -176,11 +161,15 @@ def main():
                     pipe(multiselect_filter, 'day_of_week', day_selected))
 
             submit_button = st.form_submit_button(label='Aplicar Filtros')
-
+        
         ################ Dataset após filtros
 
         st.write('## Dataset Após Filtros')
         st.write(bank.head())
+
+        st.write('---')
+
+        ################# Plotando a proporção do target antes e depois dos filtros
 
         bank_raw_target_perc = bank_raw.y.value_counts(normalize=True).to_frame() * 100
         bank_raw_target_perc = bank_raw_target_perc.sort_index()
@@ -190,20 +179,80 @@ def main():
         bank_target_perc = bank_target_perc.sort_index()
         # bank_target_perc
 
+        ################ Download dos datasets de proporção do target
+
+        col1, col2 = st.columns(2)
+
+        #### Transformando o dataset bruto em excel e fazendo download
+
+        df_xlsx = df_to_excel(bank_raw_target_perc)
+        col1.write('### Download do dataset bruto em Excel')
+        col1.write(bank_raw_target_perc)
+        col1.download_button(label='Download Excel',
+                             data=df_xlsx,
+                             file_name='bank_raw_target_proportion.xlsx')
+
+        df_xlsx = df_to_excel(bank_target_perc)
+        col2.write('### Download do dataset filtrado em Excel')
+        col2.write(bank_target_perc)
+        col2.download_button(label='Download Excel',
+                                data=df_xlsx,
+                                file_name='bank_filtered_target_proportion.xlsx')
+        
+        #### Transformando o dataset bruto em csv e fazendo download
+
+        col3, col4 = st.columns(2)
+
+        df_csv = df_to_string(bank_raw_target_perc)
+        col3.write('### Download do dataset bruto em CSV')
+        col3.write(bank_raw_target_perc)
+        col3.download_button(label='Download CSV',
+                             data=df_csv,
+                             file_name='bank_raw_target_proportion.csv')
+
+        df_csv = df_to_string(bank_target_perc)
+        col4.write('### Download do dataset filtrado em CSV')
+        col4.write(bank_target_perc)
+        col4.download_button(label='Download CSV',
+                                data=df_csv,
+                                file_name='bank_filtered_target_proportion.csv')
+        st.write('---')
+
         st.write('## Proporção de Clientes que contrataram o serviço (y)')
 
-        fig, ax = plt.subplots(1, 2, figsize= (12, 6))
+        if graph_type == 'Pizza':
+            fig, ax = plt.subplots(1, 2, figsize= (12, 6))
 
-        sns.barplot(x=bank_raw_target_perc.index, y="proportion", data=bank_raw_target_perc, ax=ax[0])
-        ax[0].bar_label(ax[0].containers[0])
-        ax[0].set_title("Dados brutos", fontweight='bold')
+            ax[0].pie(bank_raw_target_perc['proportion'], 
+                      labels=bank_raw_target_perc.index,
+                      autopct='%1.1f%%',
+                      startangle=90,
+                      textprops={'weight':'bold'})
+            ax[0].set_title("Dados brutos", fontweight='bold')
 
-        sns.barplot(x=bank_target_perc.index, y="proportion", data=bank_target_perc, ax=ax[1])
-        ax[1].bar_label(ax[1].containers[0])
-        ax[1].set_title("Dados filtrados", fontweight='bold')
+            ax[1].pie(bank_target_perc['proportion'], 
+                      labels=bank_target_perc.index,
+                      autopct='%1.1f%%',
+                      startangle=90,
+                      textprops={'weight':'bold'})
+            ax[1].set_title("Dados filtrados", fontweight='bold')
 
-        plt.tight_layout()
-        st.pyplot(fig)
+            plt.tight_layout()
+            st.pyplot(fig)
+
+        else:
+            fig, ax = plt.subplots(1, 2, figsize= (12, 6))
+
+            sns.barplot(x=bank_raw_target_perc.index, y="proportion", data=bank_raw_target_perc, ax=ax[0])
+            ax[0].bar_label(ax[0].containers[0])
+            ax[0].set_title("Dados brutos", fontweight='bold')
+
+            sns.barplot(x=bank_target_perc.index, y="proportion", data=bank_target_perc, ax=ax[1])
+            ax[1].bar_label(ax[1].containers[0])
+            ax[1].set_title("Dados filtrados", fontweight='bold')
+
+            plt.tight_layout()
+            st.pyplot(fig)
     
 if __name__ == '__main__':
     main()
