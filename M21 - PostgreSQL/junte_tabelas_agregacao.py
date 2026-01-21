@@ -11,7 +11,7 @@ import psycopg2 as pg2
 import pandas as pd
 
 conn = pg2.connect(host='localhost', port=5432, dbname='dvdrental',
-                  user='postgres', password='euestouformadanafaculdade')
+                  user='postgres', password='senha')
 cur = conn.cursor()
 
 cur.execute('''SELECT * FROM film AS x
