@@ -7,11 +7,11 @@ Original file is located at
     https://colab.research.google.com/drive/1i9FpF0nKZQe9Y_CqEy0cNNAxBwBAI9mf
 """
 
-!pip install pandas_datareader
+# !pip install pandas_datareader
 
 !pip install yfinance
 
-from pandas_datareader import data as web
+# from pandas_datareader import data as web
 import plotly.express as px
 from plotly import graph_objects
 import yfinance as yf
