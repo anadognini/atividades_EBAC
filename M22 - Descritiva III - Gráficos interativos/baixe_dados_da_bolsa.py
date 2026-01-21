@@ -18,15 +18,13 @@ import yfinance as yf
 import pandas as pd
 import numpy as np
 
-# Commented out IPython magic to ensure Python compatibility.
-# %%time
-# ativos = '^BVSP'
-# dt_ini, dt_fim = '2021-01-01', '2021-07-01'
-# 
-# df_bvsp = yf.Ticker(ativos).history(start=dt_ini, end=dt_fim)
-# df_bvsp = df_bvsp[['High', 'Low', 'Open', 'Close', 'Volume', 'Close']]
-# df_bvsp.columns = ['High', 'Low', 'Open', 'Close', 'Volume', 'Adj Close']
-# df_bvsp.head()
+ativos = '^BVSP'
+dt_ini, dt_fim = '2021-01-01', '2021-07-01'
+
+df_bvsp = yf.Ticker(ativos).history(start=dt_ini, end=dt_fim)
+df_bvsp = df_bvsp[['High', 'Low', 'Open', 'Close', 'Volume', 'Close']]
+df_bvsp.columns = ['High', 'Low', 'Open', 'Close', 'Volume', 'Adj Close']
+df_bvsp.head()
 
 ativos = ['^BVSP', 'ITUB3.SA', 'PETR4.SA', 'ABEV3.SA', 'VALE3.SA']
 dt_ini = '2016-01-01'
